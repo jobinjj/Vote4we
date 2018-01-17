@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "651415672190",
+    "firebase_url": "https://vote4we-b7ef2.firebaseio.com",
+    "project_id": "vote4we-b7ef2",
+    "storage_bucket": "vote4we-b7ef2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651415672190:android:549312de6a1a45c0",
+        "android_client_info": {
+          "package_name": "sample.com.jobin.msi.vote4we"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651415672190-abtdknigca349s5rfd08flgrpthrv507.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sample.com.jobin.msi.vote4we",
+            "certificate_hash": "89a493dbf0dc2a448ad56249ae29f46718f01e6f"
+          }
+        },
+        {
+          "client_id": "651415672190-uk33rvlra61a56u4dr8lg3rj8lfgron8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTk_bz2xUXb9NjGsgGc4JETwmSW-NOOcM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651415672190-uk33rvlra61a56u4dr8lg3rj8lfgron8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
