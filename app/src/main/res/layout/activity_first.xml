@@ -1,10 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sample.com.jobin.msi.vote4we.FirstActivity">
+    tools:context="sample.com.jobin.msi.vote4we.FirstActivity"
+    android:background="@drawable/ic_bg">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
+        <RelativeLayout
+            android:id="@+id/horizon_devider"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"/>
+        <RelativeLayout
+            android:id="@+id/vertical_devider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+        <ImageView
+            android:id="@+id/img_actor"
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/vertical_devider"
+            android:layout_toLeftOf="@+id/horizon_devider"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:src="@drawable/ic_actor"/>
 
+        <ImageView
+            android:id="@+id/img_singer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_singer"
+            android:layout_margin="30dp"
+            android:layout_toRightOf="@+id/horizon_devider"
+            android:layout_above="@+id/vertical_devider"/>
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/img_politician"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:src="@drawable/ic_politician"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toLeftOf="@+id/horizon_devider"
+            android:layout_below="@+id/vertical_devider"/>
+
+        <ImageView
+            android:id="@+id/img_player"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:src="@drawable/ic_football_player"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_toRightOf="@+id/horizon_devider"
+            android:layout_below="@+id/vertical_devider"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

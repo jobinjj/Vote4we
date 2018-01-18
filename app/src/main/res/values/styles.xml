@@ -7,5 +7,9 @@
         <item name="colorPrimaryDark">#343746</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorButtonNormal">@color/md_blue_grey_500</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
 </resources>
