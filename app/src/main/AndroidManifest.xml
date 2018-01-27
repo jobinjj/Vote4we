@@ -21,7 +21,7 @@
         <activity android:name=".FirstActivity" />
         <activity android:name=".VoteActivity" />
         <activity android:name=".RealtimeActivity" />
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".TestActivity" />
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SelectActivity" />
-        <activity android:name=".SearchToVoteActivity"></activity>
+        <activity android:name=".SearchToVoteActivity" />
+        <activity android:name=".FinalActivity"></activity>
     </application>
 
 </manifest>
