@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="sample.com.jobin.msi.vote4we.VoteActivity"
+    android:background="@drawable/ic_bg">
+
+    <sample.com.jobin.msi.vote4we.RoundedCornerNetworkImageView
+        android:id="@+id/img_celeb"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:radius="500"
+        android:layout_marginTop="33dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/img_celeb"
+        android:id="@+id/relativeLayout">
+        <TextView
+            android:id="@+id/txt_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="#fff"
+            style="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/txt_votes"
+            android:layout_alignBottom="@+id/txt_votes"
+            android:layout_toEndOf="@+id/txt_votes"
+            android:layout_toRightOf="@+id/txt_votes"
+            android:layout_marginLeft="5dp"
+            android:textColor="#fff"
+
+            android:text="votes" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_pushbutton"
+        android:layout_width="100dp"
+        android:layout_height="71dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+
+        android:src="@drawable/pushbutton_anim" />
+
+
+</RelativeLayout>

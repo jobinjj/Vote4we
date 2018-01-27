@@ -1,6 +1,7 @@
 package sample.com.jobin.msi.vote4we;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +23,12 @@ import com.google.android.gms.tasks.Task;
 
 public class RegisterActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
+
     private TextView mStatusTextView;
     private static final int RC_SIGN_IN = 9001;
     private String TAG = "tag";
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -32,9 +36,12 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
+        editor = pref.edit();
+        editor.apply();
+
         mStatusTextView = findViewById(R.id.status);
-        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
-        mStatusTextView.startAnimation(hyperspaceJumpAnimation);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -43,8 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                signIn();
+
             }
         });
         findViewById(R.id.sign_out_button).setOnClickListener(new View.OnClickListener() {
@@ -55,23 +62,31 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    public void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+//        updateUI(account);
     }
-    private void updateUI(@Nullable GoogleSignInAccount account) {
+    public void updateUI(@Nullable GoogleSignInAccount account) {
         if (account != null) {
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, account.getDisplayName()));
+//            mStatusTextView.setText(getString(R.string.signed_in_fmt, account.getDisplayName()));
 
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+//            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+//            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText(R.string.signed_out);
+            Toast.makeText(this, "signed out", Toast.LENGTH_SHORT).show();
 
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+//            mStatusTextView.setText(R.string.signed_out);
+
+            //findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+//            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
     @Override
@@ -89,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(this, account.getEmail(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, account.getEmail(), Toast.LENGTH_SHORT).show();
 
 
             // Signed in successfully, show authenticated UI.
@@ -101,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
             updateUI(null);
         }
     }
-    private void signOut() {
+    public void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -112,4 +127,16 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }
+    public void checklogin(){
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(RegisterActivity.this);
+        if (account != null) {
+          //  Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_SHORT).show();
+
+        } else {
+            signIn();
+            Toast.makeText(this, "please login", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

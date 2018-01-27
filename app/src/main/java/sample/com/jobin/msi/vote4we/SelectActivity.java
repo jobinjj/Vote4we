@@ -10,14 +10,14 @@ import android.view.View;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class FirstActivity extends AppCompatActivity {
+public class SelectActivity extends RegisterActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_select);
 
         pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
         editor = pref.edit();
@@ -31,7 +31,7 @@ public class FirstActivity extends AppCompatActivity {
         findViewById(R.id.img_actor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
+                Intent intent = new Intent(SelectActivity.this,SearchToVoteActivity.class);
                 editor.putString("type","actors");
                 editor.apply();
                 startActivity(intent);
@@ -40,7 +40,7 @@ public class FirstActivity extends AppCompatActivity {
         findViewById(R.id.img_singer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
+                Intent intent = new Intent(SelectActivity.this,SearchToVoteActivity.class);
                 editor.putString("type","singers");
                 editor.apply();
                 startActivity(intent);
@@ -49,7 +49,7 @@ public class FirstActivity extends AppCompatActivity {
         findViewById(R.id.img_politician).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
+                Intent intent = new Intent(SelectActivity.this,SearchToVoteActivity.class);
                 editor.putString("type","politicians");
                 editor.apply();
                 startActivity(intent);
@@ -58,14 +58,14 @@ public class FirstActivity extends AppCompatActivity {
         findViewById(R.id.img_player).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
+                Intent intent = new Intent(SelectActivity.this,SearchToVoteActivity.class);
                 editor.putString("type","players");
                 editor.apply();
                 startActivity(intent);
             }
         });
-
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -73,11 +73,12 @@ public class FirstActivity extends AppCompatActivity {
     public void onBackPressed() {
 
 
-        FirstActivity.super.onBackPressed();
+        SelectActivity.super.onBackPressed();
         editor.clear().apply();
-        Intent intent = new Intent(FirstActivity.this,HomeActivity.class);
+        Intent intent = new Intent(SelectActivity.this,HomeActivity.class);
         startActivity(intent);
 
 
     }
+
 }

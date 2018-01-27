@@ -3,6 +3,7 @@ package sample.com.jobin.msi.vote4we;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -37,9 +38,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class SearchActivity extends AppCompatActivity {
     private static final String url = "http://techpayyans.000webhostapp.com/Vote4We/getdata.php?";
     private ListView listView,listView2;
-    String selected;
+    String selected,type;
     EditText ed1,ed2;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     ConnectivityManager conMgr;
     RelativeLayout rl_main,rl_main2;
     NetworkInfo netInfo;
@@ -53,6 +55,9 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
+        editor = pref.edit();
+        editor.apply();
         initViews();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -150,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
         //
-            JsonArrayRequest movieReq = new JsonArrayRequest(url + "keyword=" + ed1.getText().toString().replaceAll(" ", "%20")  ,
+            JsonArrayRequest movieReq = new JsonArrayRequest(url + "keyword=" + ed1.getText().toString().replaceAll(" ", "%20")   + "&type=" + pref.getString("type","actor"),
                 new com.android.volley.Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -193,7 +198,7 @@ public class SearchActivity extends AppCompatActivity {
 
         listView2.setAdapter(adapter2);
         //
-        JsonArrayRequest movieReq = new JsonArrayRequest(url + "keyword=" + ed2.getText().toString().replaceAll(" ", "%20")  ,
+        JsonArrayRequest movieReq = new JsonArrayRequest(url + "keyword=" + ed2.getText().toString().replaceAll(" ", "%20") + "&type=" +  pref.getString("type","actor") ,
                 new com.android.volley.Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -248,87 +253,87 @@ public class SearchActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    public class CustomListAdaptersearch extends BaseAdapter {
-        private Activity activity;
-        String value;
-        private LayoutInflater inflater;
-        private List<MovieSearch> movieItems;
-        MyViewHolder holder;
-        Context context;
-        ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+        public class CustomListAdaptersearch extends BaseAdapter {
+            private Activity activity;
+            String value;
+            private LayoutInflater inflater;
+            private List<MovieSearch> movieItems;
+            MyViewHolder holder;
+            Context context;
+            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-        public CustomListAdaptersearch(Activity activity,
-                                       List<MovieSearch> movieItems, Context context) {
-            this.activity = activity;
-            this.movieItems = movieItems;
-            this.context = context;
+            public CustomListAdaptersearch(Activity activity,
+                                           List<MovieSearch> movieItems, Context context) {
+                this.activity = activity;
+                this.movieItems = movieItems;
+                this.context = context;
+            }
+
+            @Override
+            public int getCount() {
+                return movieItems.size();
+            }
+
+            @Override
+            public Object getItem(int location) {
+                return movieItems.get(location);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                if (inflater == null)
+                    inflater = (LayoutInflater) activity
+                            .getSystemService(LAYOUT_INFLATER_SERVICE);
+
+                holder = new MyViewHolder();
+                if (convertView == null)
+                    convertView = inflater.inflate(R.layout.list_row_search, null);
+
+                if (imageLoader == null)
+                    imageLoader = AppController.getInstance().getImageLoader();
+                NetworkImageView thumbNail = (NetworkImageView) convertView
+                        .findViewById(R.id.thumbnail);
+                // thumbNail.setDefaultImageResId(R.drawable.busdefault);
+
+                holder.title = (TextView) convertView.findViewById(R.id.title);
+                holder.rl_card = (RelativeLayout) convertView.findViewById(R.id.rl_card);
+
+                // getting movie data for the row
+                final MovieSearch m = movieItems.get(position);
+
+                // thumbnail image
+                // imageLoader.DisplayImage(m.getThumbnailUrl(), thumbNail);
+                thumbNail.setImageUrl(m.getThumbnailUrl(), imageLoader);
+                // title
+                holder.title.setText(m.getTitle());
+                holder.rl_card.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(),CompareActivity.class);
+                        intent.putExtra("title",m.getTitle());
+                        intent.putExtra("img_url",m.getThumbnailUrl());
+                        intent.putExtra("which",selected);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+
+
+
+                return convertView;
+            }
+
+            private class MyViewHolder {
+                public TextView title;
+                public NetworkImageView thumbNail;
+                public RelativeLayout rl_card;
+            }
         }
-
-        @Override
-        public int getCount() {
-            return movieItems.size();
-        }
-
-        @Override
-        public Object getItem(int location) {
-            return movieItems.get(location);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if (inflater == null)
-                inflater = (LayoutInflater) activity
-                        .getSystemService(LAYOUT_INFLATER_SERVICE);
-
-            holder = new MyViewHolder();
-            if (convertView == null)
-                convertView = inflater.inflate(R.layout.list_row_search, null);
-
-            if (imageLoader == null)
-                imageLoader = AppController.getInstance().getImageLoader();
-            NetworkImageView thumbNail = (NetworkImageView) convertView
-                    .findViewById(R.id.thumbnail);
-            // thumbNail.setDefaultImageResId(R.drawable.busdefault);
-
-            holder.title = (TextView) convertView.findViewById(R.id.title);
-            holder.rl_card = (RelativeLayout) convertView.findViewById(R.id.rl_card);
-
-            // getting movie data for the row
-            final MovieSearch m = movieItems.get(position);
-
-            // thumbnail image
-            // imageLoader.DisplayImage(m.getThumbnailUrl(), thumbNail);
-            thumbNail.setImageUrl(m.getThumbnailUrl(), imageLoader);
-            // title
-            holder.title.setText(m.getTitle());
-            holder.rl_card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
-                    intent.putExtra("title",m.getTitle());
-                    intent.putExtra("img_url",m.getThumbnailUrl());
-                    intent.putExtra("which",selected);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-
-
-
-
-            return convertView;
-        }
-
-        private class MyViewHolder {
-            public TextView title;
-            public NetworkImageView thumbNail;
-            public RelativeLayout rl_card;
-        }
-    }
 }
