@@ -13,6 +13,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -53,6 +55,9 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_search);
 
         pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
@@ -71,7 +76,7 @@ public class SearchActivity extends AppCompatActivity {
             rl_main2.setVisibility(View.VISIBLE);
         }
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/CeraPRO-Bold.otf")
+                .setDefaultFontPath("fonts/CeraPRO-Regular.otf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
@@ -319,6 +324,11 @@ public class SearchActivity extends AppCompatActivity {
                         intent.putExtra("title",m.getTitle());
                         intent.putExtra("img_url",m.getThumbnailUrl());
                         intent.putExtra("which",selected);
+                        if (selected.equals("second")){
+                            intent.putExtra("continue","continue");
+                        }
+
+
                         startActivity(intent);
                         finish();
                     }

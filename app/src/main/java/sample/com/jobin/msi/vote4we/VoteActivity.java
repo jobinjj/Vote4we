@@ -1,6 +1,7 @@
 package sample.com.jobin.msi.vote4we;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +9,10 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,7 @@ public class VoteActivity extends RegisterActivity {
     private DatabaseReference mDatabase;
     int rating;
     SharedPreferences pref;
+    private ProgressDialog pDialog;
     SharedPreferences.Editor editor;
     GoogleSignInAccount account;
     String name;
@@ -44,8 +49,14 @@ public class VoteActivity extends RegisterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_vote);
 
+        pDialog = new ProgressDialog(new ContextThemeWrapper(this, R.style.AppTheme));
+        pDialog.setMessage("Please wait");
+        pDialog.show();
+        pDialog.setCanceledOnTouchOutside(false);
         pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
         editor = pref.edit();
         editor.apply();
@@ -76,9 +87,11 @@ public class VoteActivity extends RegisterActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
+
                     String value = dataSnapshot.getValue(String.class);
                     if (value != null){
                         if (value.equals("rated")){
+                            pDialog.dismiss();
                             Toast.makeText(VoteActivity.this, "already rated", Toast.LENGTH_SHORT).show();
                             AnimatedVectorDrawableCompat anim2 = AnimatedVectorDrawableCompat.create(VoteActivity.this,R.drawable.pushbutton_anim);
                             if (anim2 != null){
@@ -88,6 +101,7 @@ public class VoteActivity extends RegisterActivity {
                             }
                         }
                         else {
+                            pDialog.dismiss();
                             Toast.makeText(VoteActivity.this, "eligible", Toast.LENGTH_SHORT).show();
                             img_pushbutton.setEnabled(true);
                         }

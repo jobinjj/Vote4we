@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="sample.com.jobin.msi.vote4we.VoteActivity"
-    android:background="@drawable/ic_bg">
+    android:background="#343746">
 
     <sample.com.jobin.msi.vote4we.RoundedCornerNetworkImageView
         android:id="@+id/img_celeb"

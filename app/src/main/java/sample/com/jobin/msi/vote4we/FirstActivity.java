@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -17,16 +19,21 @@ public class FirstActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
 
-        pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
-        editor = pref.edit();
-        editor.apply();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_first);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/CeraPRO-Regular.otf")
                 .setFontAttrId(R.attr.fontPath)
                 .build() );
+
+        pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
+        editor = pref.edit();
+        editor.apply();
+
+
 
         findViewById(R.id.img_actor).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,14 +77,12 @@ public class FirstActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-    public void onBackPressed() {
 
 
-        FirstActivity.super.onBackPressed();
-        editor.clear().apply();
-        Intent intent = new Intent(FirstActivity.this,HomeActivity.class);
-        startActivity(intent);
+    public void close(View view) {
 
-
+        finish();
     }
+
+
 }

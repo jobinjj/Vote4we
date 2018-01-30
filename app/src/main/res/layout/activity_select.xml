@@ -4,14 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sample.com.jobin.msi.vote4we.FirstActivity"
-    android:background="@drawable/ic_bg">
+    tools:context="sample.com.jobin.msi.vote4we.SelectActivity"
+    android:background="#343746">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:onClick="close"
+        android:src="@drawable/ic_arrow_back_white_24dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
         style="@style/Base.TextAppearance.AppCompat.Title"
         android:textColor="#fff"
+        android:textStyle="bold"
         android:layout_margin="10dp"
         android:layout_height="wrap_content"
         android:text="Select Category"/>

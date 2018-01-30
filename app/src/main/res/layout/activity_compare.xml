@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context="sample.com.jobin.msi.vote4we.CompareActivity"
     >
+
+
+
     <ImageView
         android:id="@+id/animated_img"
         android:layout_width="match_parent"

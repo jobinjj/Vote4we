@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -17,6 +19,9 @@ public class SelectActivity extends RegisterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_select);
 
         pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
@@ -72,13 +77,15 @@ public class SelectActivity extends RegisterActivity {
     }
     public void onBackPressed() {
 
-
         SelectActivity.super.onBackPressed();
         editor.clear().apply();
-        Intent intent = new Intent(SelectActivity.this,HomeActivity.class);
-        startActivity(intent);
+
 
 
     }
 
+    public void close(View view) {
+      finish();
+
+    }
 }

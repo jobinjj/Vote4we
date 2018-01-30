@@ -13,6 +13,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,6 +34,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class SearchToVoteActivity extends AppCompatActivity {
     private ListView listView;
     EditText ed1;
@@ -47,6 +52,9 @@ public class SearchToVoteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_search_to_vote);
 
         initViews();
@@ -54,6 +62,11 @@ public class SearchToVoteActivity extends AppCompatActivity {
         editor = pref.edit();
         editor.apply();
 
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/CeraPRO-Regular.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
 
         ed1.addTextChangedListener(new TextWatcher() {
 
@@ -224,6 +237,10 @@ public class SearchToVoteActivity extends AppCompatActivity {
             public NetworkImageView thumbNail;
             public RelativeLayout rl_card;
         }
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }
