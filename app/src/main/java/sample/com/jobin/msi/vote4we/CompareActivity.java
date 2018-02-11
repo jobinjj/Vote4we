@@ -18,14 +18,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -36,15 +42,15 @@ public class CompareActivity extends AppCompatActivity  {
     String selected,title,image,str_continue;
     private ProgressDialog pDialog;
     String winnername;
+    String url = "https://techpayyans.000webhostapp.com/Vote4We/winner.php?";
     private DatabaseReference mDatabase;
+    String firstname,secondname,firstrating,secondrating;
     ImageView testimg;
     String img_url;
-    int firstrating;
-            int secondrating;
+    String imageurl;
     NetworkInfo netInfo;
-    SharedPreferences pref;
-    SharedPreferences.Editor
-            editor;
+    SharedPreferences pref,pref2;
+    SharedPreferences.Editor editor,editor2;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
 
@@ -56,13 +62,13 @@ public class CompareActivity extends AppCompatActivity  {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_compare);
-
-        initViews();
-        handler();
         initsharedPreference();
-        initFirebase();
-        progressDialog();
+        initViews();
         internetConnection();
+        progressDialog();
+        handler();
+
+        initFirebase();
         customFont();
         main();
         extras();
@@ -90,7 +96,7 @@ public class CompareActivity extends AppCompatActivity  {
     }
 
     private void extras() {
-        Bundle extras = getIntent().getExtras();
+            Bundle extras = getIntent().getExtras();
         Bundle extras2 = getIntent().getExtras();
         if (extras != null) {
             selected = extras.getString("which");
@@ -100,16 +106,51 @@ public class CompareActivity extends AppCompatActivity  {
                 if (selected.equals("first")){
                     editor.putString("first",image);
                     editor.putString("firstname",title);
+                    firstname = title;
                     editor.apply();
                     img_adduser1.setImageUrl(pref.getString("first","https://techpayyans.000webhostapp.com/Vote4We/images/user.png"),imageLoader);
                     textView.setText(pref.getString("firstname","First Actor"));
 
+                    mDatabase.child(pref.getString("type","actor")).child(title).child("rating").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String value = dataSnapshot.getValue(String.class);
+                            if (value != null){
+                            firstrating  = value;
+                            editor.putString("firstrating",value).apply();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+                            Log.w("tag", "Failed to read value.", error.toException());
+                        }
+                    });
+
                 }else if (selected.equals("second")){
                     editor.putString("second",image);
                     editor.putString("secondname",title);
+                    secondname = title;
                     editor.apply();
                     img_adduser2.setImageUrl(pref.getString("second","https://techpayyans.000webhostapp.com/Vote4We/images/user.png"),imageLoader);
                     textView2.setText(pref.getString("secondname","Second Actor"));
+                    mDatabase.child(pref.getString("type","actor")).child(title).child("rating").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String value = dataSnapshot.getValue(String.class);
+                            if (value != null){
+                                secondrating = value;
+                                editor.putString("secondrating",value).apply();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+                            Log.w("tag", "Failed to read value.", error.toException());
+                        }
+                    });
                 }
             }
         }
@@ -118,52 +159,43 @@ public class CompareActivity extends AppCompatActivity  {
             str_continue = extras2.getString("continue");
 
             if(str_continue != null){
-                mDatabase.child(pref.getString("type","actor")).child(pref.getString("firstname","First Actor")).child("rating").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String value = dataSnapshot.getValue(String.class);
-                        if (value != null){
-                            firstrating = Integer.parseInt(value);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w("tag", "Failed to read value.", error.toException());
-                    }
-                });
-
-                mDatabase.child(pref.getString("type","actor")).child(pref.getString("secondname","Second Actor")).child("rating").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String value = dataSnapshot.getValue(String.class);
-                        if (value != null){
-                            secondrating = Integer.parseInt(value);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w("tag", "Failed to read value.", error.toException());
-                    }
-                });
-
-                if (firstrating > secondrating){
-                    img_url = pref.getString("first","https://techpayyans.000webhostapp.com/Vote4We/images/user.png");
-                    winnername = pref.getString("firstname","First Actor");
-                }else if (secondrating > firstrating){
-                    img_url = pref.getString("second","https://techpayyans.000webhostapp.com/Vote4We/images/user.png");
-                    winnername = pref.getString("secondname","Second Actor");
-                }
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
+                        JsonArrayRequest arrayRequest = new JsonArrayRequest(url + "rating1=" + pref.getString("firstrating","") + "&rating2=" + pref.getString("secondrating","") + "&firstname=" + pref.getString("secondname","Second Actor") + "&secondname=" + pref.getString("firstname","Second Actor") + "&imgurl1=" + pref.getString("first","") + "&imgurl2=" + pref.getString("second",""), new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+
+                                        Toast.makeText(CompareActivity.this, String.valueOf(response.length()), Toast.LENGTH_SHORT).show();
+                                        JSONObject jsonObject = response.getJSONObject(i);
+                                        Toast.makeText(CompareActivity.this, jsonObject.getString("winner"), Toast.LENGTH_SHORT).show();
+                                        imageurl = jsonObject.getString("imgurl");
+//                        Toast.makeText(FinalActivity.this, jsonObject.getString("rating1"), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FinalActivity.this, jsonObject.getString("rating2"), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FinalActivity.this, jsonObject.getString("firstname"), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FinalActivity.this, jsonObject.getString("secondname"), Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                        AppController.getInstance().addToRequestQueue(arrayRequest);
+
                         Intent intent = new Intent(CompareActivity.this,FinalActivity.class);
                         intent.putExtra("img_url",img_url);
                         intent.putExtra("winner",winnername);
+                        intent.putExtra("winnerimg",imageurl);
                         startActivity(intent);
                     }
                 }, 2000);
@@ -205,8 +237,13 @@ public class CompareActivity extends AppCompatActivity  {
 
     private void initsharedPreference() {
         pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
+        pref2 = getApplicationContext().getSharedPreferences("Mypref2",MODE_PRIVATE);
         editor = pref.edit();
         editor.apply();
+        editor2 = pref2.edit();
+//        editor2.putInt("secondrating",100);
+//        editor2.putInt("firstrating",50);
+        editor2.apply();
     }
 
     private void handler() {

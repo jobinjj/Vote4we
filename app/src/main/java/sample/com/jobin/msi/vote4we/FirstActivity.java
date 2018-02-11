@@ -13,8 +13,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FirstActivity extends AppCompatActivity {
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    SharedPreferences pref,pref2;
+    SharedPreferences.Editor editor,editor2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,11 @@ public class FirstActivity extends AppCompatActivity {
                 .build() );
 
         pref = getApplicationContext().getSharedPreferences("Mypref",MODE_PRIVATE);
+        pref2 = getApplicationContext().getSharedPreferences("Mypref2",MODE_PRIVATE);
         editor = pref.edit();
         editor.apply();
+        editor2 = pref2.edit();
+        editor2.apply();
 
 
 
@@ -40,6 +43,13 @@ public class FirstActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
                 editor.putString("type","actors");
+                editor.remove("secondname");
+                editor.remove("firstname");
+                editor.remove("firstrating");
+                editor.remove("secondrating");
+
+                editor.remove("first");
+                editor.remove("second");
                 editor.apply();
                 startActivity(intent);
             }
@@ -49,6 +59,10 @@ public class FirstActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
                 editor.putString("type","singers");
+                editor.remove("secondname");
+                editor.remove("firstname");
+                editor.remove("first");
+                editor.remove("second");
                 editor.apply();
                 startActivity(intent);
             }
@@ -58,6 +72,9 @@ public class FirstActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
                 editor.putString("type","politicians");
+                editor.remove("secondname");
+                editor.remove("second");
+                editor.remove("first");
                 editor.apply();
                 startActivity(intent);
             }
@@ -67,6 +84,10 @@ public class FirstActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FirstActivity.this,CompareActivity.class);
                 editor.putString("type","players");
+                editor.remove("secondname");
+                editor.remove("firstname");
+                editor.remove("second");
+                editor.remove("first");
                 editor.apply();
                 startActivity(intent);
             }
